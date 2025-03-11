@@ -1,8 +1,12 @@
+math.randomseed(os.time())
+
+HighscoreTime = 999
+GoldScoreTarget = 10
+
 function Restart()
     local title = "Guess my Number"
     love.window.setTitle(title)
 
-    math.randomseed(os.time())
     TargetNumber = math.random(1, 1000)
 
     PlayerGuess = ""
@@ -11,12 +15,15 @@ function Restart()
     GameOver = false
 
     Time = 0
+
+    CurrentTimeScore = 999
 end
 
 Restart()
 
 function love.update(dt)
     Time = Time + dt
+    CurrentTimeScore = Time
 end
 
 function love.textinput(input)
@@ -73,7 +80,19 @@ function love.draw()
 
     if GameOver then
         love.graphics.printf("Press enter to play again!", 0, 276 + TextBob, love.graphics.getWidth(), "center")
+        if CurrentTimeScore < HighscoreTime then
+            HighscoreTime = (math.floor(CurrentTimeScore * 100)) / 100
+        end
+    end
+
+    if HighscoreTime <= GoldScoreTarget then
+        love.graphics.setColor(255, 215, 0, 1)
+        love.graphics.print("Your Highscore: " .. HighscoreTime .. " seconds... Amazing!", 16, 16)
+        love.graphics.setColor(255, 255, 255, 255)
+    elseif HighscoreTime >= 999 then
+        love.graphics.print("Your Highscore: NA", 16, 16)
+    else
+        love.graphics.print("Your Highscore: " .. HighscoreTime .. " seconds", 16, 16)
     end
 
 end
-
