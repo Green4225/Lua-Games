@@ -23,6 +23,11 @@ function love.load()
 
     TargetPadding = 32
 
+    Sprites = {}
+    Sprites.clouds = love.graphics.newImage("assets/cloud.png")
+    Sprites.target = love.graphics.newImage("assets/target.png")
+    Sprites.crosshairs = love.graphics.newImage("assets/crosshair.png")
+
     NewRandom()
 
 end
@@ -48,6 +53,7 @@ function love.draw()
     love.graphics.print(Score, 16, 16)
     love.graphics.print(math.ceil(Timer), 300, 16)
 
+    love.graphics.draw(Sprites.crosshairs, love.mouse.getX() - 32, love.mouse.getY() - 32)
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
