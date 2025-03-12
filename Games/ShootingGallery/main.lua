@@ -17,7 +17,7 @@ function love.load()
 
     Score = 0
 
-    Timer = 0
+    Timer = 10
 
     GameFont = love.graphics.newFont(40)
 
@@ -29,6 +29,13 @@ end
 
 function love.update(dt)
 
+    if Timer > 0 then
+        Timer = Timer - dt
+    end
+    if Timer < 0 then
+        Timer = 0
+    end
+
 end
 
 function love.draw()
@@ -39,6 +46,7 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(GameFont)
     love.graphics.print(Score, 16, 16)
+    love.graphics.print(math.ceil(Timer), 300, 16)
 
 end
 
