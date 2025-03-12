@@ -1,0 +1,6 @@
+{
+    "Lua.diagnostics.globals": [
+        "{   \"Lua.diagnostics.globals\": [     \"love\"   ] }",
+        "love"
+    ]
+}
