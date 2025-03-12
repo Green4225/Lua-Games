@@ -10,10 +10,16 @@ function love.load()
     TargetTable.y = 300
     TargetTable.radius = 50
 
-    Refous = {}
-    Refous.r = 168 / 255
-    Refous.g = 28 / 255
-    Refous.b = 7 / 255
+    SkyColour = {}
+    SkyColour.r = 153 / 255
+    SkyColour.g = 204 / 255
+    SkyColour.b = 255 / 255
+
+    CrosshairColour = {}
+    CrosshairColour.r = 40 / 255
+    CrosshairColour.g = 1 / 255
+    CrosshairColour.b = 55 / 255
+
 
     Score = 0
 
@@ -27,6 +33,15 @@ function love.load()
     Sprites.clouds = love.graphics.newImage("assets/cloud.png")
     Sprites.target = love.graphics.newImage("assets/target.png")
     Sprites.crosshairs = love.graphics.newImage("assets/crosshair.png")
+
+    Music = love.audio.newSource("assets/sky.mp3", "stream")
+    Music:setLooping(true)
+    Music:play()
+
+    Sounds = {}
+    Sounds.impact = love.audio.newSource("assets/impact.wav", "static")
+
+    love.mouse.setVisible(false)
 
     NewRandom()
 
@@ -45,15 +60,19 @@ end
 
 function love.draw()
 
-    love.graphics.setColor(Refous.r, Refous.g, Refous.b)
-    love.graphics.circle("fill", TargetTable.x, TargetTable.y, TargetTable.radius)
+    love.graphics.setBackgroundColor(SkyColour.r, SkyColour.g, SkyColour.b)
+    love.graphics.draw(Sprites.clouds, 0, 0, 0, love.graphics.getWidth() / 576, love.graphics.getHeight() / 324)
 
-    love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(GameFont)
     love.graphics.print(Score, 16, 16)
     love.graphics.print(math.ceil(Timer), 300, 16)
 
+    love.graphics.draw(Sprites.target, TargetTable.x - 50, TargetTable.y - 50)
+
+    love.graphics.setColor(CrosshairColour.r, CrosshairColour.g, CrosshairColour.b)
     love.graphics.draw(Sprites.crosshairs, love.mouse.getX() - 32, love.mouse.getY() - 32)
+    love.graphics.setColor(1, 1, 1)
+
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
@@ -61,6 +80,7 @@ function love.mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         local mouseToTarget = DistanceBetween(x, y, TargetTable.x, TargetTable.y)
         if mouseToTarget <= TargetTable.radius then
+            Sounds.impact:play()
             Score = Score + 1
             NewTargetXY()
         end
