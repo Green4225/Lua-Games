@@ -66,6 +66,7 @@ function love.load()
     love.graphics.setFont(gameFont)
 
     local music = love.audio.newSource("assets/space-music.ogg", "stream")
+    music:setLooping(true)
     music:play()
 end
 
