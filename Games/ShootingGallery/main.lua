@@ -48,10 +48,7 @@ function love.mousepressed(x, y, button, istouch, presses)
         local mouseToTarget = DistanceBetween(x, y, TargetTable.x, TargetTable.y)
         if mouseToTarget <= TargetTable.radius then
             Score = Score + 1
-            NewRandom()
-            TargetTable.x = TargetRandom
-            NewRandom()
-            TargetTable.y = TargetRandom
+            NewTargetXY()
         end
     end
 
@@ -82,9 +79,28 @@ function NewRandom()
 end
 
 function NewTargetXY()
-    NewRandom()
-    TargetTable.x = TargetRandom
+    local randomTooCloseCheckX = false
+    local randomTooCloseCheckY = false
 
     NewRandom()
-    TargetTable.y = TargetRandom
+
+    while randomTooCloseCheckX == false do
+        if math.abs(TargetRandom - TargetTable.x) <= TargetTable.radius then
+            NewRandom()
+        else
+            TargetTable.x = TargetRandom
+            randomTooCloseCheckX = true
+        end
+
+        NewRandom()
+
+        while randomTooCloseCheckY == false do
+            if math.abs(TargetRandom - TargetTable.y) <= TargetTable.radius then
+                NewRandom()
+            else
+                TargetTable.y = TargetRandom
+                randomTooCloseCheckY = true
+            end
+        end
+    end
 end
