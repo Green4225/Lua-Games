@@ -6,8 +6,8 @@ function love.load()
     love.window.setTitle(title)
 
     TargetTable = {}
-    TargetTable.x = 300
-    TargetTable.y = 300
+    TargetTable.x = 0
+    TargetTable.y = 0
     TargetTable.radius = 50
 
     SkyColour = {}
@@ -20,10 +20,13 @@ function love.load()
     CrosshairColour.g = 1 / 255
     CrosshairColour.b = 55 / 255
 
-
     Score = 0
 
-    Timer = 10
+    Timer = 0
+
+    StartMessage = "Press Any Mouse Button to Start"
+
+    GameState = 1
 
     GameFont = love.graphics.newFont(40)
 
@@ -45,6 +48,8 @@ function love.load()
 
     NewRandom()
 
+    NewTargetXY()
+
 end
 
 function love.update(dt)
@@ -54,6 +59,7 @@ function love.update(dt)
     end
     if Timer < 0 then
         Timer = 0
+        GameState = 1
     end
 
 end
@@ -64,10 +70,15 @@ function love.draw()
     love.graphics.draw(Sprites.clouds, 0, 0, 0, love.graphics.getWidth() / 576, love.graphics.getHeight() / 324)
 
     love.graphics.setFont(GameFont)
-    love.graphics.print(Score, 16, 16)
-    love.graphics.print(math.ceil(Timer), 300, 16)
+    if GameState == 1 then
+        love.graphics.printf(StartMessage, 0, love.graphics.getHeight() / 2, love.graphics.getWidth(), "center")
+    end
+    love.graphics.print("Score: " .. Score, 16, 16)
+    love.graphics.print("Time Left: " .. math.ceil(Timer), 300, 16)
 
-    love.graphics.draw(Sprites.target, TargetTable.x - 50, TargetTable.y - 50)
+    if GameState == 2 then
+        love.graphics.draw(Sprites.target, TargetTable.x - 50, TargetTable.y - 50)
+    end
 
     love.graphics.setColor(CrosshairColour.r, CrosshairColour.g, CrosshairColour.b)
     love.graphics.draw(Sprites.crosshairs, love.mouse.getX() - 32, love.mouse.getY() - 32)
@@ -77,13 +88,22 @@ end
 
 function love.mousepressed(x, y, button, istouch, presses)
 
-    if button == 1 then
+    if button == 1 and GameState == 2 then
         local mouseToTarget = DistanceBetween(x, y, TargetTable.x, TargetTable.y)
         if mouseToTarget <= TargetTable.radius then
             Sounds.impact:play()
             Score = Score + 1
             NewTargetXY()
+        else
+            Score = Score - 1
+            if Score <= 0 then
+                Score = 0
+            end
         end
+    elseif GameState == 1 then
+        GameState = 2
+        Timer = 10
+        Score = 0
     end
 
 end
