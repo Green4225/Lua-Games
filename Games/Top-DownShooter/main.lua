@@ -24,6 +24,8 @@ function love.load()
     Player.idealSpeed = 3
     Player.baseSpeed = Player.idealSpeed * 60
 
+    Zombies = {}
+
 end
 
 function love.update(dt)
@@ -47,6 +49,24 @@ function love.draw()
 
     love.graphics.draw(Sprites.background, 0, 0)
 
-    love.graphics.draw(Sprites.player, Player.x, Player.y, math.pi/2)
+    love.graphics.draw(Sprites.player, Player.x, Player.y, PlayerMouseANgle(), nil, nil, Sprites.player:getWidth() / 2,
+        Sprites.player:getWidth() / 2)
 
+        for i,z in ipairs(Zombies) do
+        
+        end
+end
+
+function PlayerMouseANgle()
+    return math.atan2(Player.y - love.mouse.getY(), Player.x - love.mouse.getX()) + math.pi
+end
+
+function SpawnZombie()
+    local zombie = {}
+    zombie.x = 300
+    zombie.y = 500
+    zombie.idealSpeed = 1
+    zombie.baseSpeed = zombie.idealSpeed * 60
+
+    table.insert(Zombies, zombie)
 end
