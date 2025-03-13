@@ -129,16 +129,16 @@ function love.draw()
 
     love.graphics.draw(Sprites.background, 0, 0)
 
-    love.graphics.draw(Sprites.player, Player.x, Player.y, PlayerMouseAngle(), 2, nil, Sprites.player:getWidth() / 2,
+    love.graphics.draw(Sprites.player, Player.x, Player.y, PlayerMouseAngle(), nil, nil, Sprites.player:getWidth() / 2,
         Sprites.player:getHeight() / 2)
 
     for i, z in ipairs(Zombies) do
-        love.graphics.draw(Sprites.zombie, z.x, z.y, ZombiePlayerAngle(z), 2, nil, Sprites.zombie:getWidth() / 2,
+        love.graphics.draw(Sprites.zombie, z.x, z.y, ZombiePlayerAngle(z), nil, nil, Sprites.zombie:getWidth() / 2,
             Sprites.zombie:getHeight() / 2)
     end
 
     for i, b in ipairs(Bullets) do
-        love.graphics.draw(Sprites.bullet, b.x, b.y, nil, 1, nil, Sprites.bullet:getWidth() / 2,
+        love.graphics.draw(Sprites.bullet, b.x, b.y, nil, 0.3, nil, Sprites.bullet:getWidth() / 2,
             Sprites.bullet:getHeight() / 2)
     end
 
