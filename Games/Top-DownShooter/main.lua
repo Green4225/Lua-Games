@@ -15,6 +15,9 @@ function love.load()
     Music.main = love.audio.newSource("assets/main.mp3", "stream")
     Music.battle = love.audio.newSource("assets/battle.mp3", "stream")
 
+    Sound = {}
+    Sound.shockwave = love.audio.newSource("assets/shockwave.mp3", "static")
+
     Music.main:setLooping(true)
     Music.battle:setLooping(true)
 
@@ -82,17 +85,18 @@ function love.update(dt)
                 Player.idealSpeed = (Player.idealSpeed / 3) * 2
                 Player.baseSpeed = Player.idealSpeed * 60
                 Player.injured = false
+                Sound.shockwave:play()
             end
 
             if GameState == 2 then
                 Player.injured = true
                 Player.idealSpeed = Player.idealSpeed * 1.33
                 Player.baseSpeed = Player.idealSpeed * 60
+                Sound.shockwave:play()
             end
 
         end
     end
-
 
     for i, b in ipairs(Bullets) do
         b.x = b.x + math.cos(b.direction) * b.baseSpeed * dt
@@ -145,8 +149,14 @@ function love.draw()
 
     love.graphics.draw(Sprites.background, 0, 0)
 
+    if Player.injured == true then
+        love.graphics.setColor(1, 0, 0)
+    end
+
     love.graphics.draw(Sprites.player, Player.x, Player.y, PlayerMouseAngle(), nil, nil, Sprites.player:getWidth() / 2,
         Sprites.player:getHeight() / 2)
+
+        love.graphics.setColor(1, 1, 1)
 
     for i, z in ipairs(Zombies) do
         love.graphics.draw(Sprites.zombie, z.x, z.y, ZombiePlayerAngle(z), nil, nil, Sprites.zombie:getWidth() / 2,
