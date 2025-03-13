@@ -25,6 +25,7 @@ function love.load()
     Player.y = love.graphics.getHeight() / 2
     Player.idealSpeed = 3
     Player.baseSpeed = Player.idealSpeed * 60
+    Player.injured = false
 
     Zombies = {}
 
@@ -65,8 +66,12 @@ function love.update(dt)
         z.y = z.y + math.sin(ZombiePlayerAngle(z)) * z.baseSpeed * dt
 
         if DistanceBetween(z.x, z.y, Player.x, Player.y) < Sprites.player:getWidth() / 2 then
+
             for i, z in ipairs(Zombies) do
                 Zombies[i] = nil
+            end
+
+            if Player.injured == true then
                 GameState = 1
                 Player.x = love.graphics.getWidth() / 2
                 Player.y = love.graphics.getHeight() / 2
@@ -74,10 +79,21 @@ function love.update(dt)
                 Music.battle:stop()
                 MaxTime = 2
                 Timer = MaxTime
-
+                Player.idealSpeed = (Player.idealSpeed / 3) * 2
+                Player.baseSpeed = Player.idealSpeed * 60
+                Player.injured = false
             end
+
+            if GameState == 2 then
+                Player.injured = true
+                Player.idealSpeed = Player.idealSpeed * 1.33
+                Player.baseSpeed = Player.idealSpeed * 60
+            end
+
         end
     end
+
+
     for i, b in ipairs(Bullets) do
         b.x = b.x + math.cos(b.direction) * b.baseSpeed * dt
         b.y = b.y + math.sin(b.direction) * b.baseSpeed * dt
